@@ -1,0 +1,209 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="CatalogModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Company">
+          <Key>
+            <PropertyRef Name="CompanyID" />
+          </Key>
+          <Property Name="CompanyID" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Address" Type="nvarchar" MaxLength="100" />
+          <Property Name="Contact" Type="nvarchar" MaxLength="100" />
+          <Property Name="Email" Type="nvarchar" MaxLength="50" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="50" />
+          <Property Name="Postcode" Type="nvarchar" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="Logs">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Message" Type="nvarchar(max)" />
+          <Property Name="MessageTemplate" Type="nvarchar(max)" />
+          <Property Name="Level" Type="nvarchar" MaxLength="128" />
+          <Property Name="TimeStamp" Type="datetimeoffset" Precision="7" Nullable="false" />
+          <Property Name="Exception" Type="nvarchar(max)" />
+          <Property Name="Properties" Type="xml" />
+          <Property Name="LogEvent" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="ProductID" />
+          </Key>
+          <Property Name="ProductID" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Color" Type="nvarchar" MaxLength="15" />
+          <Property Name="Size" Type="nvarchar" MaxLength="5" />
+          <Property Name="Price" Type="money" Nullable="false" />
+          <Property Name="Quantity" Type="int" />
+          <Property Name="CompanyID" Type="int" />
+          <Property Name="Data" Type="nvarchar" MaxLength="4000" />
+          <Property Name="Tags" Type="nvarchar" MaxLength="4000" />
+          <Property Name="DateModified" Type="datetime2" Precision="0" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Product_Company">
+          <End Role="Company" Type="Self.Company" Multiplicity="0..1" />
+          <End Role="Product" Type="Self.Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Company">
+              <PropertyRef Name="CompanyID" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="CompanyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="CatalogModelStoreContainer">
+          <EntitySet Name="Company" EntityType="Self.Company" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Logs" EntityType="Self.Logs" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Product" EntityType="Self.Product" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Product_Company" Association="Self.FK_Product_Company">
+            <End Role="Company" EntitySet="Company" />
+            <End Role="Product" EntitySet="Product" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="CatalogModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Company">
+          <Key>
+            <PropertyRef Name="CompanyID" />
+          </Key>
+          <Property Name="CompanyID" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Address" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Contact" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Postcode" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Products" Relationship="Self.FK_Product_Company" FromRole="Company" ToRole="Product" />
+        </EntityType>
+        <EntityType Name="Log">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Message" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="MessageTemplate" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Level" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="TimeStamp" Type="DateTimeOffset" Nullable="false" Precision="7" />
+          <Property Name="Exception" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Properties" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="LogEvent" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="ProductID" />
+          </Key>
+          <Property Name="ProductID" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Color" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="Size" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
+          <Property Name="Price" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="Quantity" Type="Int32" />
+          <Property Name="CompanyID" Type="Int32" />
+          <Property Name="Data" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
+          <Property Name="Tags" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
+          <Property Name="DateModified" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="Company" Relationship="Self.FK_Product_Company" FromRole="Product" ToRole="Company" />
+        </EntityType>
+        <Association Name="FK_Product_Company">
+          <End Role="Company" Type="Self.Company" Multiplicity="0..1" />
+          <End Role="Product" Type="Self.Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Company">
+              <PropertyRef Name="CompanyID" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="CompanyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="CatalogEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Companies" EntityType="Self.Company" />
+          <EntitySet Name="Logs" EntityType="Self.Log" />
+          <EntitySet Name="Products" EntityType="Self.Product" />
+          <AssociationSet Name="FK_Product_Company" Association="Self.FK_Product_Company">
+            <End Role="Company" EntitySet="Companies" />
+            <End Role="Product" EntitySet="Products" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="CatalogModelStoreContainer" CdmEntityContainer="CatalogEntities">
+          <EntitySetMapping Name="Companies">
+            <EntityTypeMapping TypeName="CatalogModel.Company">
+              <MappingFragment StoreEntitySet="Company">
+                <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Contact" ColumnName="Contact" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Postcode" ColumnName="Postcode" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Logs">
+            <EntityTypeMapping TypeName="CatalogModel.Log">
+              <MappingFragment StoreEntitySet="Logs">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Message" ColumnName="Message" />
+                <ScalarProperty Name="MessageTemplate" ColumnName="MessageTemplate" />
+                <ScalarProperty Name="Level" ColumnName="Level" />
+                <ScalarProperty Name="TimeStamp" ColumnName="TimeStamp" />
+                <ScalarProperty Name="Exception" ColumnName="Exception" />
+                <ScalarProperty Name="Properties" ColumnName="Properties" />
+                <ScalarProperty Name="LogEvent" ColumnName="LogEvent" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Products">
+            <EntityTypeMapping TypeName="CatalogModel.Product">
+              <MappingFragment StoreEntitySet="Product">
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Color" ColumnName="Color" />
+                <ScalarProperty Name="Size" ColumnName="Size" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
+                <ScalarProperty Name="Data" ColumnName="Data" />
+                <ScalarProperty Name="Tags" ColumnName="Tags" />
+                <ScalarProperty Name="DateModified" ColumnName="DateModified" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
